@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#d4e4fc",
+                        "primary-fixed": "#d6e3ff",
+                        "on-secondary-fixed-variant": "#004881",
+                        "inverse-primary": "#adc7f7",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#0d1c2e",
+                        "on-primary": "#ffffff",
+                        "outline": "#74777f",
+                        "on-primary-container": "#86a0cd",
+                        "secondary-fixed-dim": "#a2c9ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "tertiary-container": "#4f2e00",
+                        "surface-container": "#e5eeff",
+                        "background": "#f8f9ff",
+                        "primary-container": "#1a365d",
+                        "surface-variant": "#d4e4fc",
+                        "secondary-fixed": "#d3e4ff",
+                        "tertiary-fixed-dim": "#f2bc82",
+                        "on-tertiary-fixed": "#2b1700",
+                        "on-background": "#0d1c2e",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#455f88",
+                        "tertiary-fixed": "#ffddba",
+                        "on-tertiary-fixed-variant": "#633f0f",
+                        "primary-fixed-dim": "#adc7f7",
+                        "tertiary": "#321b00",
+                        "secondary": "#1960a3",
+                        "on-tertiary-container": "#c6955e",
+                        "on-primary-fixed-variant": "#2d476f",
+                        "secondary-container": "#7db6ff",
+                        "on-secondary-fixed": "#001c38",
+                        "on-primary-fixed": "#001b3c",
+                        "inverse-surface": "#223144",
+                        "surface-container-high": "#dce9ff",
+                        "surface-bright": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "on-secondary-container": "#00477f",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#eff4ff",
+                        "on-surface-variant": "#43474e",
+                        "primary": "#002045",
+                        "outline-variant": "#c4c6cf",
+                        "surface-dim": "#ccdbf4",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "12px",
+                        "md": "24px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "xl": "64px",
+                        "lg": "40px",
+                        "base": "8px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "button": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "body-md": ["Inter"],
+                        "h3": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "h1": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "h2": ["Inter"]
+                    },
+                    "fontSize": {
+                        "button": ["16px", {"lineHeight": "1", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "body-sm": ["14px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "h3": ["24px", {"lineHeight": "1.4", "letterSpacing": "0em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "letterSpacing": "0em", "fontWeight": "400"}],
+                        "h1": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "h2": ["30px", {"lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="bg-background font-body-md text-on-background">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 border-b bg-white/90 backdrop-blur-md border-slate-200 shadow-sm">
+<div class="flex justify-between items-center px-8 h-16 w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black text-blue-900 tracking-tighter">UniClubs</span>
+<nav class="hidden md:flex gap-6">
+<a class="font-inter text-sm font-bold tracking-wide text-blue-700 border-b-2 border-blue-700 pb-1" href="#">Explore</a>
+<a class="font-inter text-sm font-medium tracking-wide text-slate-600 hover:text-blue-800 transition-all" href="#">Categories</a>
+<a class="font-inter text-sm font-medium tracking-wide text-slate-600 hover:text-blue-800 transition-all" href="#">Recruitment</a>
+<a class="font-inter text-sm font-medium tracking-wide text-slate-600 hover:text-blue-800 transition-all" href="#">Resources</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+    <a href="logIn.html" class="px-4 py-2 text-button font-button rounded-lg text-blue-900 hover:bg-slate-50 transition-colors duration-200 flex items-center justify-center">
+        Sign In
+    </a> 
+    
+    <a href="Register.html" class="px-6 py-2 bg-[#ECC94B] text-primary text-button font-button rounded-lg shadow-sm hover:opacity-90 transition-all flex items-center justify-center">
+        Apply Now
+    </a>
+</div>
+</div>
+</header>
+<main class="pt-16">
+<!-- Hero Section -->
+<section class="relative h-[600px] flex items-center justify-center overflow-hidden">
+<img alt="Prestige University Campus" class="absolute inset-0 w-full h-full object-cover" data-alt="Wide shot of a historic university campus with ivy-covered brick buildings, lush green lawns, and students walking during a golden hour sunset." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmu_ck1uoQE4TpmLjzEtPbvupgWK4xo62aS747-FarjuAvBEfOdpAzK9TIGafm1yKTxnl-tst4RFfow30OjLJPnR_2lKLe9zV9n3tOYRzttQ7M2T0Q8VTl8FYupWH22bYj4BVAizZYLv8bGwpWw4dJCjHQsWUcgD-Av2JJUOjRAp9XQ9CAzPm7-6KHpD1bkpe5Z-Ex9SFeYWtO6do6A7nLDYuxUg9TssZAL3rMe2P7CbIHkboRC_vM71woLnvMMgt1BapWgiYO0auC"/>
+<div class="absolute inset-0 bg-primary/60 backdrop-brightness-75"></div>
+<div class="relative z-10 text-center px-6 max-w-4xl mx-auto">
+<h1 class="font-h1 text-h1 text-white mb-6">Forge Your Path: Discover Your Community at Prestige University.</h1>
+<p class="font-body-lg text-body-lg text-white/90 mb-10">Join over 200 student organizations dedicated to excellence, innovation, and leadership.</p>
+<!-- Hero Search Bar -->
+<div class="bg-white p-2 rounded-xl shadow-xl flex flex-col md:flex-row gap-2 max-w-2xl mx-auto">
+<div class="flex-1 flex items-center px-4 gap-3">
+<span class="material-symbols-outlined text-slate-400">search</span>
+<input class="w-full border-none focus:ring-0 text-body-md py-3" placeholder="Search for clubs, interests, or majors..." type="text"/>
+</div>
+<button class="bg-secondary text-white px-8 py-3 rounded-lg font-button text-button hover:bg-primary-container transition-colors">Search Clubs</button>
+</div>
+<!-- Quick Categories -->
+<div class="mt-8 flex flex-wrap justify-center gap-3">
+<span class="text-white/80 font-label-caps text-label-caps mr-2 self-center">Quick Access:</span>
+<a class="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-4 py-1.5 rounded-full text-body-sm transition-all" href="#">STEM</a>
+<a class="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-4 py-1.5 rounded-full text-body-sm transition-all" href="#">Arts</a>
+<a class="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-4 py-1.5 rounded-full text-body-sm transition-all" href="#">Leadership</a>
+<a class="bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 text-white px-4 py-1.5 rounded-full text-body-sm transition-all" href="#">Service</a>
+</div>
+</div>
+</section>
+<!-- Why Join Section -->
+<section class="py-xl bg-surface">
+<div class="max-w-7xl mx-auto px-8">
+<div class="text-center mb-16">
+<h2 class="font-h2 text-h2 text-primary mb-4">Why Join?</h2>
+<div class="h-1 w-20 bg-[#ECC94B] mx-auto"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="bg-white p-8 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 bg-secondary-container/20 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-secondary text-3xl">hub</span>
+</div>
+<h3 class="font-h3 text-h3 text-primary mb-3">Networking</h3>
+<p class="text-body-md text-on-surface-variant">Connect with like-minded peers, alumni, and industry professionals in your field of interest.</p>
+</div>
+<div class="bg-white p-8 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 bg-secondary-container/20 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-secondary text-3xl">psychology</span>
+</div>
+<h3 class="font-h3 text-h3 text-primary mb-3">Skill Building</h3>
+<p class="text-body-md text-on-surface-variant">Gain hands-on experience in leadership, project management, and specialized technical skills.</p>
+</div>
+<div class="bg-white p-8 rounded-xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+<div class="w-14 h-14 bg-secondary-container/20 rounded-full flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-secondary text-3xl">groups</span>
+</div>
+<h3 class="font-h3 text-h3 text-primary mb-3">Community</h3>
+<p class="text-body-md text-on-surface-variant">Find your home away from home and build lifelong friendships within our vibrant campus culture.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Featured Clubs - Bento Style -->
+<section class="py-xl bg-white">
+<div class="max-w-7xl mx-auto px-8">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+<div>
+<h2 class="font-h2 text-h2 text-primary">Featured Organizations</h2>
+<p class="text-body-lg text-on-surface-variant mt-2">Discover elite clubs currently recruiting for the upcoming semester.</p>
+</div>
+<button class="flex items-center gap-2 text-secondary font-button hover:underline">
+                        View All Organizations <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 grid-rows-2 gap-6">
+<!-- Featured Card 1 (Large) -->
+<div class="md:col-span-2 lg:col-span-3 row-span-2 group relative rounded-2xl overflow-hidden shadow-lg border border-slate-100 flex flex-col">
+<div class="h-64 relative overflow-hidden">
+<img alt="Robotics Club" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" data-alt="Modern high-tech lab with students working on a complex robotic arm, electronic components and soldering irons on the table." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDTr_wZ9nCMNB5InPNmjlb3XbiqExoRdIRQqFf_gEV6_SKO_YQcRQI29UUWtXECbuF2Sm3ghWScY1pFcdHSN1zpvUw9Lfgi-nb9ZWSLpVwl5oY7GlQQw8E0Po6o358cnqWPy1SDrOIleWW-YmupqJp7MXuZIrCb3RCQLeOoCqX2KIK_x6lu1GyDoIs3-6CuVJY4lZTJ5uCKfR2QgfQkrMTvbY9DEVVAT9-2IVYtfNjOjgO6xl8N1-FQ95bJJCTcifo_NM6oPZo8jc9k"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary text-white text-label-caps font-label-caps px-3 py-1 rounded-full">STEM Elite</span>
+</div>
+</div>
+<div class="p-8 flex-1 flex flex-col bg-white">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-h3 text-2xl text-primary">Prestige Robotics Lab</h3>
+<div class="flex items-center gap-1 text-on-surface-variant text-body-sm">
+<span class="material-symbols-outlined text-sm">person</span> 142 members
+                                </div>
+</div>
+<p class="text-body-md text-on-surface-variant mb-6 flex-1">Our flagship robotics team competing in international competitions. Seeking engineers, coders, and project managers for the National Circuit.</p>
+<div class="flex gap-4">
+<button class="flex-1 bg-secondary text-white py-3 rounded-lg font-button hover:bg-primary transition-all">Apply Now</button>
+<button class="px-6 border border-secondary text-secondary py-3 rounded-lg font-button hover:bg-slate-50 transition-all">Details</button>
+</div>
+</div>
+</div>
+<!-- Featured Card 2 (Medium) -->
+<div class="md:col-span-2 lg:col-span-3 group relative rounded-2xl overflow-hidden shadow-md border border-slate-100 flex bg-white">
+<div class="w-1/3 relative overflow-hidden hidden sm:block">
+<img alt="Performing Arts" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Dynamic performance stage with silhouette of dancers and vibrant stage lighting in blue and purple hues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJtvC08VH9eSrlDZX3pXZ0zre6Olj2UzZ_qna1Gt4pPMdDlEDC0d3Vxg_dNPlFTqNw7TI-GxZxGn90yAgASjd-bkIdKURefzjgjgRDBVxMGbJ0O-w5YO6RKFExaX2WuoGdhZDxashbAK5uCEnsYTyjh3haAMzSdI9raiVLYltgYfTrG4FP_DAoGoe_ggsfGyqZVFdKU2PmKlNN-x7mGhoYoavqQttSV31qd7tVqamAJpOPsd06WfmCgkwrVaSqtnm8IHJhiiDoUjlH"/>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-secondary font-label-caps text-xs">ARTS &amp; CULTURE</span>
+<span class="text-on-surface-variant text-xs flex items-center gap-1"><span class="material-symbols-outlined text-xs">person</span> 85</span>
+</div>
+<h3 class="font-h3 text-xl text-primary mb-2">Vanguard Theatre Guild</h3>
+<p class="text-body-sm text-on-surface-variant line-clamp-2">The premier theatrical production group on campus specializing in contemporary drama.</p>
+</div>
+<button class="mt-4 text-secondary font-button text-sm flex items-center gap-1 hover:gap-2 transition-all">Learn More <span class="material-symbols-outlined text-sm">east</span></button>
+</div>
+</div>
+<!-- Featured Card 3 (Small) -->
+<div class="md:col-span-2 lg:col-span-3 group relative rounded-2xl overflow-hidden shadow-md border border-slate-100 flex bg-white">
+<div class="w-1/3 relative overflow-hidden hidden sm:block">
+<img alt="Leadership Club" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Group of diverse young professionals in a modern boardroom collaborating on a project strategy with colorful sticky notes." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBrmdjbjrCQvKLKt3dBh5LLaiTH7G_vOgtDT6VwXrEfA9h3U78Ov50dZ1U6ZuPqsSU08lPOOgvciQIRs5-QM2dQzcmVLNm1ZJMzfR0J-ZdFpbdRQ87SKsXNUCgKkeG1ozZnPvBjvUgp7-nCFOCyXeI7joc8qVWtqPo0UGfpPkXgG54NQKWg_6STr5vQTMNRpJ6hEIeiYtER9BVEzsrFwCH2ymKTEcfLup6swfg9oaHYgvzuZOmyD64lbOQBgqJqCaPPtAMmcf2FkD8"/>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between items-center mb-2">
+<span class="text-secondary font-label-caps text-xs">LEADERSHIP</span>
+<span class="text-on-surface-variant text-xs flex items-center gap-1"><span class="material-symbols-outlined text-xs">person</span> 210</span>
+</div>
+<h3 class="font-h3 text-xl text-primary mb-2">Global Business Leaders</h3>
+<p class="text-body-sm text-on-surface-variant line-clamp-2">Pre-professional society dedicated to networking with Fortune 500 executives.</p>
+</div>
+<button class="mt-4 text-secondary font-button text-sm flex items-center gap-1 hover:gap-2 transition-all">Learn More <span class="material-symbols-outlined text-sm">east</span></button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recruitment Timeline -->
+<section class="py-xl bg-surface-container-low">
+<div class="max-w-4xl mx-auto px-8">
+<div class="text-center mb-12">
+<h2 class="font-h2 text-h2 text-primary">Fall Recruitment Timeline</h2>
+<p class="text-body-md text-on-surface-variant mt-2">Key dates for your application journey.</p>
+</div>
+<div class="relative py-4">
+<!-- Line -->
+<div class="absolute left-[20px] top-0 bottom-0 w-1 bg-secondary-container rounded-full hidden md:block"></div>
+<div class="space-y-12">
+<!-- Step 1 -->
+<div class="relative md:pl-16">
+<div class="absolute left-0 top-0 w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white z-10 hidden md:flex shadow-md">
+<span class="material-symbols-outlined">how_to_reg</span>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-secondary">PHASE 1</span>
+<span class="text-on-surface-variant font-medium">Sept 1 - Sept 15</span>
+</div>
+<h4 class="font-h3 text-lg text-primary mb-2">Club Fair &amp; Open Houses</h4>
+<p class="text-body-md text-on-surface-variant">Explore the full directory and attend informational sessions across campus.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative md:pl-16">
+<div class="absolute left-0 top-0 w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white z-10 hidden md:flex shadow-md">
+<span class="material-symbols-outlined">edit_note</span>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-secondary">PHASE 2</span>
+<span class="text-on-surface-variant font-medium">Sept 16 - Sept 25</span>
+</div>
+<h4 class="font-h3 text-lg text-primary mb-2">Application Window</h4>
+<p class="text-body-md text-on-surface-variant">Submit your official interest forms and resumes through the portal.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="relative md:pl-16">
+<div class="absolute left-0 top-0 w-10 h-10 bg-[#ECC94B] rounded-full flex items-center justify-center text-primary z-10 hidden md:flex shadow-md">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-l-[#ECC94B]">
+<div class="flex justify-between items-center mb-2">
+<span class="font-label-caps text-secondary">PHASE 3</span>
+<span class="text-on-surface-variant font-medium">Oct 1 - Oct 5</span>
+</div>
+<h4 class="font-h3 text-lg text-primary mb-2">Final Decisions</h4>
+<p class="text-body-md text-on-surface-variant">Check your dashboard for acceptance notifications and induction details.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-xl bg-primary text-white text-center">
+<div class="max-w-4xl mx-auto px-8">
+<h2 class="font-h1 text-h1 mb-6">Ready to Lead?</h2>
+<p class="font-body-lg text-white/80 mb-10 max-w-2xl mx-auto">Don't miss the chance to enhance your university experience. Applications for prestigious societies are now open for the Fall term.</p>
+<div class="flex flex-col sm:flex-row justify-center gap-4">
+<button class="bg-[#ECC94B] text-primary px-10 py-4 rounded-lg font-button text-button hover:brightness-105 transition-all active:scale-95">Get Started Today</button>
+<button class="bg-white/10 border border-white/20 text-white px-10 py-4 rounded-lg font-button text-button hover:bg-white/20 transition-all active:scale-95">Download Handbook</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-slate-200 bg-slate-50">
+<div class="flex flex-col md:flex-row justify-between items-center px-12 py-10 w-full max-w-7xl mx-auto gap-6">
+<div class="flex flex-col gap-2 items-center md:items-start">
+<span class="text-lg font-bold text-blue-900">UniClubs</span>
+<p class="font-inter text-xs uppercase tracking-widest text-slate-500 text-center md:text-left">© 2024 Prestige University Student Affairs. Excellence in Community.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="font-inter text-xs uppercase tracking-widest text-slate-500 hover:text-blue-900 underline decoration-blue-500/30 underline-offset-4 opacity-100 hover:opacity-80 transition-opacity" href="#">Privacy Policy</a>
+<a class="font-inter text-xs uppercase tracking-widest text-slate-500 hover:text-blue-900 underline decoration-blue-500/30 underline-offset-4 opacity-100 hover:opacity-80 transition-opacity" href="#">Terms of Service</a>
+<a class="font-inter text-xs uppercase tracking-widest text-slate-500 hover:text-blue-900 underline decoration-blue-500/30 underline-offset-4 opacity-100 hover:opacity-80 transition-opacity" href="#">Accessibility</a>
+<a class="font-inter text-xs uppercase tracking-widest text-slate-500 hover:text-blue-900 underline decoration-blue-500/30 underline-offset-4 opacity-100 hover:opacity-80 transition-opacity" href="#">Club Handbook</a>
+<a class="font-inter text-xs uppercase tracking-widest text-slate-500 hover:text-blue-900 underline decoration-blue-500/30 underline-offset-4 opacity-100 hover:opacity-80 transition-opacity" href="#">Contact Support</a>
+</div>
+</div>
+</footer>
+</body></html>
