@@ -1,10 +1,15 @@
 <?php
 session_start();
-include 'db.php'; // Ensure your connection file is named db.php
+include 'db.php';
 
 $error = '';
 
+// REMEMBER ME (autoload cookies)
+$email = $_COOKIE['user_email'] ?? '';
+$password = $_COOKIE['user_password'] ?? '';
+
 if (isset($_POST['login'])) {
+
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
@@ -16,13 +21,21 @@ if (isset($_POST['login'])) {
     if ($result->num_rows === 1) {
         $user = $result->fetch_assoc();
         
-        // Use password_verify for security
         if (password_verify($password, $user['password'])) {
+
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['name'] = $user['name'];
 
-            // Role-based redirection[cite: 9, 12]
+            // REMEMBER ME
+            if (!empty($_POST['remember'])) {
+                setcookie("user_email", $email, time() + (86400 * 30), "/");
+                setcookie("user_password", $password, time() + (86400 * 30), "/"); // ⚠️ for school only
+            } else {
+                setcookie("user_email", "", time() - 3600, "/");
+                setcookie("user_password", "", time() - 3600, "/");
+            }
+
             if ($user['role'] === 'admin') {
                 header("Location: Admin/Admin_Dashboard.php");
             } else {
@@ -37,15 +50,18 @@ if (isset($_POST['login'])) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html class="light" lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
   <title>Login - NBSC-CampusClubRecruit</title>
+
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-  <script id="tailwind-config">
+
+  <script>
     tailwind.config = {
       darkMode: "class",
       theme: {
@@ -64,6 +80,7 @@ if (isset($_POST['login'])) {
       },
     }
   </script>
+
   <style>
     .material-symbols-outlined {
       font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
@@ -77,13 +94,14 @@ if (isset($_POST['login'])) {
     }
   </style>
 </head>
+
 <body class="bg-[#f8f9ff] font-sans text-[#0d1c2e] min-h-screen flex flex-col">
 
 <!-- Header -->
 <header class="bg-[#F7FAFC] border-b border-[#E2E8F0] shadow-sm sticky top-0 z-50">
   <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-    <span class="text-xl font-bold text-[#1A365D] font-['Inter'] tracking-tight">CampusClubRecruit</span>
-    <a class="text-[#4A5568] hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg font-['Inter'] font-semibold" href="index.html">Back to Menu</a>
+    <span class="text-xl font-bold text-[#1A365D] tracking-tight">CampusClubRecruit</span>
+    <a class="text-[#4A5568] hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg font-semibold" href="index.html">Back to Menu</a>
   </div>
 </header>
 
@@ -96,93 +114,92 @@ if (isset($_POST['login'])) {
       <p class="text-[#43474e] text-base">Sign in to access your recruitment portal</p>
     </div>
 
-    <!-- Error message display[cite: 12] -->
     <?php if (!empty($error)): ?>
       <div class="mb-4 px-4 py-3 bg-red-50 border border-red-300 text-red-700 rounded-lg text-sm">
         <?= htmlspecialchars($error) ?>
       </div>
     <?php endif; ?>
 
-    <!-- Main Styled Form[cite: 12] -->
-    <form method="POST" action="logIn.php" class="space-y-6">
+    <!-- FORM -->
+    <form method="POST" action="" class="space-y-6">
 
       <!-- Email -->
       <div class="space-y-1">
-        <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block" for="email">Institutional Email</label>
+        <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block">Institutional Email</label>
         <div class="relative">
           <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#74777f]">mail</span>
           <input
-            class="w-full pl-10 pr-4 py-3 bg-white border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#2B6CB0] focus:border-[#2B6CB0] transition-all outline-none text-base"
-            id="email"
+            class="w-full pl-10 pr-4 py-3 bg-[#F1F5F9] border border-[#CBD5E1] rounded-lg focus:ring-2 focus:ring-[#2B6CB0] outline-none"
             name="email"
-            placeholder="student@nbsc.edu"
-            required
             type="email"
-            value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
+            required
+            value="<?= htmlspecialchars($email) ?>"
           />
         </div>
       </div>
 
       <!-- Password -->
       <div class="space-y-1">
-        <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block" for="password">Password</label>
+        <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block">Password</label>
         <div class="relative">
           <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#74777f]">lock</span>
+
           <input
-            class="w-full pl-10 pr-4 py-3 bg-white border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#2B6CB0] focus:border-[#2B6CB0] transition-all outline-none text-base"
             id="password"
+            class="w-full pl-10 pr-10 py-3 bg-[#F1F5F9] border border-[#CBD5E1] rounded-lg focus:ring-2 focus:ring-[#2B6CB0] outline-none"
             name="password"
-            placeholder="••••••••"
-            required
             type="password"
+            required
+            value="<?= htmlspecialchars($password) ?>"
           />
+
+          <!-- SHOW/HIDE -->
+          <button type="button" onclick="togglePassword()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-[#74777f]">
+            <span id="eyeIcon" class="material-symbols-outlined">visibility</span>
+          </button>
+
         </div>
       </div>
 
-      <!-- Remember me + Forgot -->
+      <!-- Remember -->
       <div class="flex items-center justify-between">
         <label class="flex items-center gap-2 cursor-pointer">
-          <input class="w-4 h-4 rounded border-[#E2E8F0] text-[#2B6CB0] focus:ring-[#2B6CB0]" type="checkbox" name="remember"/>
+          <input type="checkbox" name="remember">
           <span class="text-sm text-[#43474e]">Remember Me</span>
         </label>
         <a class="text-sm text-[#2B6CB0] font-semibold hover:underline" href="forgot-pass.php">Forgot Password?</a>
       </div>
 
-      <!-- Submit button linked to the logic above[cite: 12] -->
+      <!-- Submit -->
       <button
-        class="w-full bg-[#ECC94B] hover:opacity-90 active:opacity-80 text-[#002045] font-semibold text-base py-4 rounded-lg shadow-md transition-all flex items-center justify-center gap-2"
+        class="w-full bg-[#ECC94B] hover:opacity-90 text-[#002045] font-semibold py-4 rounded-lg shadow-md flex items-center justify-center gap-2"
         name="login"
-        type="submit"
-      >
+        type="submit">
         Sign In
         <span class="material-symbols-outlined">login</span>
       </button>
-    </form>
 
-    <div class="mt-8 pt-6 border-t border-[#c4c6cf]/30 text-center">
-      <p class="text-base text-[#43474e]">
-        New to the community?
-        <a class="text-[#2B6CB0] font-bold hover:underline ml-1" href="Register.php">Create Account</a>
-      </p>
-    </div>
+    </form>
 
   </div>
 </main>
 
-<!-- Footer -->
-<footer class="bg-[#F7FAFC] border-t border-[#E2E8F0]">
-  <div class="flex flex-col md:flex-row justify-between items-center w-full px-8 py-10 gap-4 max-w-7xl mx-auto">
-    <div>
-      <span class="text-lg font-bold text-[#1A365D]">CampusClubRecruit</span>
-      <p class="text-sm text-[#718096]">© 2026 NBSC Recruitment Portal. All rights reserved.</p>
-    </div>
-    <div class="flex gap-8">
-      <a class="text-sm text-[#718096] hover:text-[#2B6CB0] underline" href="#">Privacy Policy</a>
-      <a class="text-sm text-[#718096] hover:text-[#2B6CB0] underline" href="#">Terms of Service</a>
-      <a class="text-sm text-[#718096] hover:text-[#2B6CB0] underline" href="#">Support</a>
-    </div>
-  </div>
-</footer>
+<!-- SCRIPT -->
+<script>
+function togglePassword() {
+  const input = document.getElementById("password");
+  const icon = document.getElementById("eyeIcon");
+
+  if (input.type === "password") {
+    input.type = "text";
+    icon.textContent = "visibility_off";
+  } else {
+    input.type = "password";
+    icon.textContent = "visibility";
+  }
+}
+</script>
 
 </body>
 </html>
