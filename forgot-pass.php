@@ -17,15 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->store_result();
 
         if ($stmt->num_rows === 1) {
-            $token = bin2hex(random_bytes(32));
-            $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
+           $token = bin2hex(random_bytes(32));
 
             $del = $conn->prepare("DELETE FROM password_resets WHERE email = ?");
             $del->bind_param("s", $email);
             $del->execute();
 
-            $ins = $conn->prepare("INSERT INTO password_resets (email, token, expires_at) VALUES (?, ?, ?)");
-            $ins->bind_param("sss", $email, $token, $expires);
+            // 🔥 FIX: Let MySQL handle the time natively to prevent timezone mismatch!
+            $ins = $conn->prepare("INSERT INTO password_resets (email, token, expires_at) VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 1 HOUR))");
+            $ins->bind_param("ss", $email, $token); // Changed from "sss" to "ss"
             $ins->execute();
 
             // LOCAL DEV HACK: Output the link directly to the screen
