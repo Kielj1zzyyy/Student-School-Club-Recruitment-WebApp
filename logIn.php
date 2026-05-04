@@ -100,7 +100,13 @@ if (isset($_POST['login'])) {
 <!-- Header -->
 <header class="bg-[#F7FAFC] border-b border-[#E2E8F0] shadow-sm sticky top-0 z-50">
   <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-    <span class="text-xl font-bold text-[#1A365D] tracking-tight">CampusClubRecruit</span>
+    
+    <div class="flex items-center gap-3">
+      <!-- PASTE YOUR IMAGE LINK OR FILE NAME INSIDE THE src="..." BELOW -->
+      <img src="Src\NBSC_Logo.png" alt="NBSC Logo" class="h-8 w-auto" />
+      <span class="text-xl font-bold text-[#1A365D] tracking-tight">NBSC-CampusClubRecruit</span>
+    </div>
+
     <a class="text-[#4A5568] hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg font-semibold" href="index.html">Back to Menu</a>
   </div>
 </header>
