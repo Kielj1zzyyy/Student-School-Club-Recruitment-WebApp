@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'db.php'; // Uses the clean connection file
+include 'db.php'; 
 
 $error = '';
 $success = '';
@@ -11,18 +11,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Please enter a valid email address.";
     } else {
-        // Check if email exists in the users table[cite: 11]
         $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows === 1) {
-            // Generate a secure random token[cite: 11]
             $token = bin2hex(random_bytes(32));
             $expires = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
-            // Clean old requests and save new token to the database[cite: 11]
             $del = $conn->prepare("DELETE FROM password_resets WHERE email = ?");
             $del->bind_param("s", $email);
             $del->execute();
@@ -31,11 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $ins->bind_param("sss", $email, $token, $expires);
             $ins->execute();
 
-            // Generic success message to prevent email fishing[cite: 11]
-            $success = "If that email is registered, a reset link has been sent. Check your inbox.";
+            // LOCAL DEV HACK: Output the link directly to the screen
+            $reset_link = "reset-password.php?token=" . $token;
+            $success = "<div class='flex flex-col'><strong>[LOCAL TEST MODE]</strong> <span>Pretend this is an email:</span> <a href='$reset_link' class='underline text-blue-800 font-bold mt-1'>Click here to Reset Password</a></div>";
+            
         } else {
-            // Always show success even if not found for security[cite: 11]
-            $success = "If that email is registered, a reset link has been sent. Check your inbox.";
+            $error = "Email not found in database for local testing.";
         }
     }
 }
@@ -86,9 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Success Message -->
         <?php if ($success): ?>
-          <div class="mb-6 px-4 py-3 bg-green-50 border border-green-300 text-green-700 rounded-lg text-sm flex items-center gap-2">
-            <span class="material-symbols-outlined text-green-600 text-lg">check_circle</span>
-            <?= htmlspecialchars($success) ?>
+          <div class="mb-6 px-4 py-3 bg-green-50 border border-green-300 text-green-700 rounded-lg text-sm flex items-start gap-2">
+            <span class="material-symbols-outlined text-green-600 text-lg mt-0.5">check_circle</span>
+            <!-- Removed htmlspecialchars so the link renders properly -->
+            <?= $success ?>
           </div>
         <?php endif; ?>
 
@@ -100,7 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         <?php endif; ?>
 
-        <form action="forgot-password.php" method="POST" class="space-y-6">
+        <!-- Form action changed to empty string "" to submit to itself safely -->
+        <form action="" method="POST" class="space-y-6">
           <div class="space-y-2">
             <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block" for="email">Institutional Email</label>
             <div class="relative">
