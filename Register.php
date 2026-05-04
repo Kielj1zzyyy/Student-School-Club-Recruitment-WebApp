@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     $confirm = $_POST['confirm_password'];
 
-    // Validation checks[cite: 10]
+    // Validation checks
     if (empty($name) || empty($username) || empty($email) || empty($password)) {
         $error = "All fields are required.";
     } elseif ($password !== $confirm) {
@@ -29,9 +29,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $role = 'student'; // Security: Always hardcoded to student
 
-           
-    $stmt = $conn->prepare("INSERT INTO users (name, username, email, password, role) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $name, $username, $email, $password, $role); 
+            // Hash the password securely
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            $stmt = $conn->prepare("INSERT INTO users (name, username, email, password, role) VALUES (?, ?, ?, ?, ?)");
+            // Bind the $hashed_password, NOT the plain $password
+            $stmt->bind_param("sssss", $name, $username, $email, $hashed_password, $role); 
 
             if ($stmt->execute()) {
                 $success = "Account created! You can now log in.";
@@ -69,7 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- Header -->
 <header class="bg-[#F7FAFC] border-b border-[#E2E8F0] shadow-sm sticky top-0 z-50">
   <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
-    <span class="text-xl font-bold text-[#1A365D] tracking-tight">CampusClubRecruit</span>
+    <div class="flex items-center gap-3">
+      <img src="Src\NBSC_Logo.png" alt="NBSC Logo" class="h-8 w-auto" />
+      <span class="text-xl font-bold text-[#1A365D] tracking-tight">CampusClubRecruit</span>
+    </div>
     <a class="text-[#4A5568] hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg font-semibold text-sm" href="logIn.php">Back to Login</a>
   </div>
 </header>
@@ -136,7 +142,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block mb-1" for="password">Password</label>
           <div class="relative">
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#74777f] text-xl">lock</span>
-            <input name="password" id="password" type="password" required placeholder="At least 8 characters" class="w-full pl-10 pr-4 py-3 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#2B6CB0] outline-none transition-all text-base"/>
+            <input name="password" id="password" type="password" required placeholder="At least 8 characters" class="w-full pl-10 pr-10 py-3 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#2B6CB0] outline-none transition-all text-base"/>
+            <button type="button" onclick="togglePassword('password', 'eyeIcon1')" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#74777f]">
+              <span id="eyeIcon1" class="material-symbols-outlined">visibility</span>
+            </button>
           </div>
         </div>
 
@@ -144,7 +153,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block mb-1" for="confirm_password">Confirm Password</label>
           <div class="relative">
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#74777f] text-xl">lock_reset</span>
-            <input name="confirm_password" id="confirm_password" type="password" required placeholder="Re-enter your password" class="w-full pl-10 pr-4 py-3 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#2B6CB0] outline-none transition-all text-base"/>
+            <input name="confirm_password" id="confirm_password" type="password" required placeholder="Re-enter your password" class="w-full pl-10 pr-10 py-3 border border-[#E2E8F0] rounded-lg focus:ring-2 focus:ring-[#2B6CB0] outline-none transition-all text-base"/>
+            <button type="button" onclick="togglePassword('confirm_password', 'eyeIcon2')" class="absolute right-3 top-1/2 -translate-y-1/2 text-[#74777f]">
+              <span id="eyeIcon2" class="material-symbols-outlined">visibility</span>
+            </button>
           </div>
         </div>
 
@@ -173,5 +185,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 </footer>
+
+<!-- SCRIPT FOR PASSWORD TOGGLE -->
+<script>
+function togglePassword(inputId, iconId) {
+  const input = document.getElementById(inputId);
+  const icon = document.getElementById(iconId);
+
+  if (input.type === "password") {
+    input.type = "text";
+    icon.textContent = "visibility_off";
+  } else {
+    input.type = "password";
+    icon.textContent = "visibility";
+  }
+}
+</script>
+
 </body>
 </html>
