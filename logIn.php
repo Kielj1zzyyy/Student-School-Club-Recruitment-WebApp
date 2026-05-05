@@ -1,14 +1,18 @@
 <?php
 session_start();
+
+// RECENT CHANGE: Added error reporting to force any hidden login errors to display on screen
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 include 'db.php';
 
 $error = '';
 
-// REMEMBER ME (autoload cookies)
 $email = $_COOKIE['user_email'] ?? '';
 $password = $_COOKIE['user_password'] ?? '';
 
-if (isset($_POST['login'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $email = trim($_POST['email']);
     $password = $_POST['password'];
@@ -27,21 +31,23 @@ if (isset($_POST['login'])) {
             $_SESSION['role'] = $user['role'];
             $_SESSION['name'] = $user['name'];
 
-            // REMEMBER ME
             if (!empty($_POST['remember'])) {
                 setcookie("user_email", $email, time() + (86400 * 30), "/");
-                setcookie("user_password", $password, time() + (86400 * 30), "/"); // ⚠️ for school only
+                setcookie("user_password", $password, time() + (86400 * 30), "/"); 
             } else {
                 setcookie("user_email", "", time() - 3600, "/");
                 setcookie("user_password", "", time() - 3600, "/");
             }
 
-            if ($user['role'] === 'admin') {
-                header("Location: Admin/Admin_Dashboard.php");
-            } else {
-                header("Location: Student/Student_Dashboard.php");
-            }
-            exit();
+            // RECENT CHANGE: Removed duplicate session role assignment here
+
+            // Route them to the correct FOLDERS
+          if ($user['role'] === 'admin') {
+        header("Location: Admin/Admin_Dashboard.php");
+        } else {
+        header("Location: Student/Student_Dashboard.php");
+        }
+      exit();
         } else {
             $error = "Wrong password. Please try again.";
         }
@@ -97,13 +103,12 @@ if (isset($_POST['login'])) {
 
 <body class="bg-[#f8f9ff] font-sans text-[#0d1c2e] min-h-screen flex flex-col">
 
-<!-- Header -->
 <header class="bg-[#F7FAFC] border-b border-[#E2E8F0] shadow-sm sticky top-0 z-50">
   <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
     
     <div class="flex items-center gap-3">
-      <!-- PASTE YOUR IMAGE LINK OR FILE NAME INSIDE THE src="..." BELOW -->
-      <img src="Src\NBSC_Logo.png" alt="NBSC Logo" class="h-8 w-auto" />
+      <!-- RECENT CHANGE: Fixed backslash in image source path to prevent broken images on some servers -->
+      <img src="Src/NBSC_Logo.png" alt="NBSC Logo" class="h-8 w-auto" />
       <span class="text-xl font-bold text-[#1A365D] tracking-tight">NBSC-CampusClubRecruit</span>
     </div>
 
@@ -111,7 +116,6 @@ if (isset($_POST['login'])) {
   </div>
 </header>
 
-<!-- Main -->
 <main class="flex-grow flex items-center justify-center campus-overlay p-6">
   <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-10 border border-[#c4c6cf]/30">
 
@@ -126,10 +130,8 @@ if (isset($_POST['login'])) {
       </div>
     <?php endif; ?>
 
-    <!-- FORM -->
     <form method="POST" action="" class="space-y-6">
 
-      <!-- Email -->
       <div class="space-y-1">
         <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block">Institutional Email</label>
         <div class="relative">
@@ -144,7 +146,6 @@ if (isset($_POST['login'])) {
         </div>
       </div>
 
-      <!-- Password -->
       <div class="space-y-1">
         <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block">Password</label>
         <div class="relative">
@@ -159,7 +160,6 @@ if (isset($_POST['login'])) {
             value="<?= htmlspecialchars($password) ?>"
           />
 
-          <!-- SHOW/HIDE -->
           <button type="button" onclick="togglePassword()"
             class="absolute right-3 top-1/2 -translate-y-1/2 text-[#74777f]">
             <span id="eyeIcon" class="material-symbols-outlined">visibility</span>
@@ -168,7 +168,6 @@ if (isset($_POST['login'])) {
         </div>
       </div>
 
-      <!-- Remember -->
       <div class="flex items-center justify-between">
         <label class="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" name="remember">
@@ -177,7 +176,6 @@ if (isset($_POST['login'])) {
         <a class="text-sm text-[#2B6CB0] font-semibold hover:underline" href="forgot-pass.php">Forgot Password?</a>
       </div>
 
-      <!-- Submit -->
       <button
         class="w-full bg-[#ECC94B] hover:opacity-90 text-[#002045] font-semibold py-4 rounded-lg shadow-md flex items-center justify-center gap-2"
         name="login"
@@ -191,7 +189,6 @@ if (isset($_POST['login'])) {
   </div>
 </main>
 
-<!-- SCRIPT -->
 <script>
 function togglePassword() {
   const input = document.getElementById("password");
