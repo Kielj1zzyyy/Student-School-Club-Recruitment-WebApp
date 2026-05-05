@@ -1,18 +1,41 @@
 <?php
 session_start();
 
-// Check if the user is logged in and is a student
+
+if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id(true);
+    $_SESSION['initiated'] = true;
+}
+
+$timeout = 1800;
+
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout) {
+    session_unset();
+    session_destroy();
+    header("Location: ../logIn.php");
+    exit();
+}
+
+$_SESSION['last_activity'] = time();
+
+
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'student') {
     header("Location: ../logIn.php");
     exit();
 }
 
-// Fetch the user's name from the session (fallback to 'Student' if not found)
-$fullName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Student';
 
-// Extract just the first name for the casual "Welcome Back" greeting
-$nameParts = explode(' ', trim($fullName));
-$firstName = $nameParts[0];
+$fullName = trim($_SESSION['name'] ?? '');
+if (empty($fullName)) {
+    $fullName = 'Student';
+}
+
+$nameParts = explode(' ', $fullName);
+$firstName = $nameParts[0] ?? 'Student';
+
+
+$safeFullName = htmlspecialchars($fullName, ENT_QUOTES, 'UTF-8');
+$safeFirstName = htmlspecialchars($firstName, ENT_QUOTES, 'UTF-8');
 ?>
 
 <!DOCTYPE html>
@@ -196,12 +219,12 @@ $firstName = $nameParts[0];
 <div class="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
 <div class="text-right">
 <!-- 🔥 DYNAMIC FULL NAME HERE 🔥 -->
-<p class="text-sm font-bold text-slate-900"><?= htmlspecialchars($fullName) ?></p>
+<p class="text-sm font-bold text-slate-900"><?= $safeFullName ?></p>
 <p class="text-xs text-slate-500">Student Portal</p>
 </div>
 <div class="w-10 h-10 rounded-full border-2 border-primary-fixed bg-blue-100 flex items-center justify-center text-blue-800 font-bold">
     <!-- Initial instead of generic image -->
-    <?= strtoupper(substr($firstName, 0, 1)) ?>
+    <?= strtoupper(substr($safeFirstName, 0, 1)) ?>
 </div>
 </div>
 </div>
@@ -211,7 +234,7 @@ $firstName = $nameParts[0];
 <div class="relative overflow-hidden rounded-xl bg-primary-container p-10 mb-8 flex flex-col md:flex-row items-center justify-between">
 <div class="relative z-10 text-white max-w-2xl">
 <!-- 🔥 DYNAMIC FIRST NAME HERE 🔥 -->
-<h2 class="font-h1 text-h1 mb-2">Welcome Back, <?= htmlspecialchars($firstName) ?>!</h2>
+<h2 class="font-h1 text-h1 mb-2">Welcome Back, <?= $safeFirstName ?>!</h2>
 <p class="font-body-lg text-body-lg text-blue-100 opacity-90 mb-6">Your recruitment journey is looking promising. You have <span class="text-brand-gold font-bold">2 active applications</span> and 4 new club recommendations waiting for you.</p>
 <div class="flex gap-4">
 <button class="bg-brand-gold text-primary font-button text-button px-6 py-3 rounded-lg hover:shadow-lg transition-shadow">View Status Updates</button>
