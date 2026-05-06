@@ -1,19 +1,17 @@
 <?php
 session_start();
 
-// RECENT CHANGE: Added error reporting to force any hidden login errors to display on screen
+// Error reporting for login debugging[cite: 1]
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 include 'db.php';
 
 $error = '';
-
 $email = $_COOKIE['user_email'] ?? '';
 $password = $_COOKIE['user_password'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
@@ -26,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $result->fetch_assoc();
         
         if (password_verify($password, $user['password'])) {
-
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['role'] = $user['role'];
             $_SESSION['name'] = $user['name'];
@@ -39,15 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 setcookie("user_password", "", time() - 3600, "/");
             }
 
-            // RECENT CHANGE: Removed duplicate session role assignment here
-
-            // Route them to the correct FOLDERS
-          if ($user['role'] === 'admin') {
-        header("Location: Admin/Admin_Dashboard.php");
-        } else {
-        header("Location: Student/Student_Dashboard.php");
-        }
-      exit();
+            if ($user['role'] === 'admin') {
+                header("Location: Admin/Admin_Dashboard.php");
+            } else {
+                header("Location: Student/Student_Dashboard.php");
+            }
+            exit();
         } else {
             $error = "Wrong password. Please try again.";
         }
@@ -65,126 +59,128 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>Login - NBSC-CampusClubRecruit</title>
 
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-
-  <script>
-    tailwind.config = {
-      darkMode: "class",
-      theme: {
-        extend: {
-          colors: {
-            "on-surface-variant": "#43474e",
-            "background": "#f8f9ff",
-            "primary-container": "#1a365d",
-            "outline-variant": "#c4c6cf",
-            "surface-container-lowest": "#ffffff",
-            "primary": "#002045",
-            "on-surface": "#0d1c2e",
-            "outline": "#74777f"
-          },
-        },
-      },
-    }
-  </script>
+  <!-- Using Inter with specific professional weights[cite: 2, 3] -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
   <style>
+    body { 
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+        -webkit-font-smoothing: antialiased;
+    }
     .material-symbols-outlined {
-      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
       vertical-align: middle;
     }
     .campus-overlay {
-      background-image: linear-gradient(rgba(0,32,69,0.8), rgba(0,32,69,0.6)),
-        url(https://lh3.googleusercontent.com/aida-public/AB6AXuCs1AAPLCphxTbVVDwvzBY-U-UovPcKRzbgnTJyIRduhp6lHn1KjMHkSe9LfdoqTtqPaNJM-9_-kuyBy3NgbtwdKljycX_QPGiu0WmgKYJGZEnKM817fMju57dIIXnU8mH3tiYl7g4jlzKCQ_fqmgquwvvo6qeyKObh958vDEYxlMIiQkqXNwDoYukUpDIqaWUCSj3J7LwtoTYmrYmLdLGpd0j_aeAgnNTIJd3L720xvTAr8nCL5JCkCp7oJBrHzloeWvoa5efJr40O);
+      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 58, 138, 0.85) 100%),
+        url('https://images.unsplash.com/photo-1541339907198-e08759dfc3f0?q=80&w=2070&auto=format&fit=crop');
       background-size: cover;
       background-position: center;
+      background-attachment: fixed;
+    }
+    .login-card {
+      background: #ffffff;
+      box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    /* Smooth transition for input focus[cite: 2] */
+    .input-transition {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
   </style>
 </head>
 
-<body class="bg-[#f8f9ff] font-sans text-[#0d1c2e] min-h-screen flex flex-col">
+<body class="bg-slate-900 min-h-screen flex flex-col campus-overlay">
 
-<header class="bg-[#F7FAFC] border-b border-[#E2E8F0] shadow-sm sticky top-0 z-50">
-  <div class="flex justify-between items-center w-full px-6 py-4 max-w-7xl mx-auto">
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+  <div class="flex justify-between items-center w-full px-8 py-5 max-w-7xl mx-auto">
     
-    <div class="flex items-center gap-3">
-      <!-- RECENT CHANGE: Fixed backslash in image source path to prevent broken images on some servers -->
-      <img src="Src/NBSC_Logo.png" alt="NBSC Logo" class="h-8 w-auto" />
-      <span class="text-xl font-bold text-[#1A365D] tracking-tight">NBSC-CampusClubRecruit</span>
+    <div class="flex items-center gap-4">
+      <img src="Src/NBSC_Logo.png" alt="NBSC Logo" class="h-10 w-auto" />
+      <div class="w-px h-6 bg-slate-200"></div>
+      <span class="text-xl font-black text-blue-900 tracking-tighter uppercase">NBSC <span class="font-medium text-slate-400">Club Recruit Portal</span></span>
     </div>
 
-    <a class="text-[#4A5568] hover:bg-slate-100 transition-colors px-3 py-1 rounded-lg font-semibold" href="index.html">Back to Menu</a>
+    <a class="text-slate-600 hover:text-blue-800 px-5 py-2 rounded-xl font-bold text-xs bg-slate-50 border border-slate-100 transition-all uppercase tracking-widest" href="index.html">Back to Menu</a>
   </div>
 </header>
 
-<main class="flex-grow flex items-center justify-center campus-overlay p-6">
-  <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-10 border border-[#c4c6cf]/30">
+<main class="flex-grow flex items-center justify-center p-6">
+  <div class="max-w-md w-full login-card rounded-[2.5rem] p-10 md:p-14">
 
-    <div class="text-center mb-8">
-      <h1 class="text-3xl font-semibold text-[#002045] mb-1">Welcome Back</h1>
-      <p class="text-[#43474e] text-base">Sign in to access your recruitment portal</p>
+    <div class="text-center mb-12">
+      <h1 class="text-4xl font-black text-slate-900 mb-3 tracking-tight">Welcome Back</h1>
+      <p class="text-slate-500 text-sm font-medium leading-relaxed px-4">Sign in to access your recruitment portal</p>
     </div>
 
     <?php if (!empty($error)): ?>
-      <div class="mb-4 px-4 py-3 bg-red-50 border border-red-300 text-red-700 rounded-lg text-sm">
+      <div class="mb-8 px-5 py-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl text-[13px] font-semibold flex items-center gap-3">
+        <span class="material-symbols-outlined text-lg">error</span>
         <?= htmlspecialchars($error) ?>
       </div>
     <?php endif; ?>
 
-    <form method="POST" action="" class="space-y-6">
+    <form method="POST" action="" class="space-y-7">
 
-      <div class="space-y-1">
-        <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block">Institutional Email</label>
-        <div class="relative">
-          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#74777f]">mail</span>
+      <div class="space-y-2.5">
+        <label class="text-[11px] font-extrabold text-blue-900 uppercase tracking-[0.15em] ml-1">Institutional Email</label>
+        <div class="relative group">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">mail</span>
           <input
-            class="w-full pl-10 pr-4 py-3 bg-[#F1F5F9] border border-[#CBD5E1] rounded-lg focus:ring-2 focus:ring-[#2B6CB0] outline-none"
+            class="input-transition w-full pl-12 pr-4 py-4.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none font-semibold text-slate-900 text-sm"
             name="email"
             type="email"
             required
+            placeholder="name@nbsc.edu.ph"
             value="<?= htmlspecialchars($email) ?>"
           />
         </div>
       </div>
 
-      <div class="space-y-1">
-        <label class="text-xs font-bold text-[#43474e] uppercase tracking-widest block">Password</label>
-        <div class="relative">
-          <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#74777f]">lock</span>
+      <div class="space-y-2.5">
+        <label class="text-[11px] font-extrabold text-blue-900 uppercase tracking-[0.15em] ml-1">Password</label>
+        <div class="relative group">
+          <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-600 transition-colors">lock</span>
 
           <input
             id="password"
-            class="w-full pl-10 pr-10 py-3 bg-[#F1F5F9] border border-[#CBD5E1] rounded-lg focus:ring-2 focus:ring-[#2B6CB0] outline-none"
+            class="input-transition w-full pl-12 pr-12 py-4.5 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-4 focus:ring-blue-50 focus:border-blue-600 outline-none font-semibold text-slate-900 text-sm"
             name="password"
             type="password"
             required
+            placeholder="••••••••"
             value="<?= htmlspecialchars($password) ?>"
           />
 
           <button type="button" onclick="togglePassword()"
-            class="absolute right-3 top-1/2 -translate-y-1/2 text-[#74777f]">
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-700 transition-colors">
             <span id="eyeIcon" class="material-symbols-outlined">visibility</span>
           </button>
 
         </div>
       </div>
 
-      <div class="flex items-center justify-between">
-        <label class="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" name="remember">
-          <span class="text-sm text-[#43474e]">Remember Me</span>
+      <div class="flex items-center justify-between px-1">
+        <label class="flex items-center gap-3 cursor-pointer group">
+          <input type="checkbox" name="remember" class="w-5 h-5 rounded-md border-slate-300 text-blue-600 focus:ring-blue-100 transition-all">
+          <span class="text-[13px] font-bold text-slate-500 group-hover:text-slate-800 transition-colors">Remember Me</span>
         </label>
-        <a class="text-sm text-[#2B6CB0] font-semibold hover:underline" href="forgot-pass.php">Forgot Password?</a>
+        <a class="text-[13px] font-bold text-blue-700 hover:text-blue-800 underline underline-offset-4 decoration-blue-200" href="forgot-pass.php">Forgot Password?</a>
       </div>
 
       <button
-        class="w-full bg-[#ECC94B] hover:opacity-90 text-[#002045] font-semibold py-4 rounded-lg shadow-md flex items-center justify-center gap-2"
+        class="w-full bg-blue-900 hover:bg-blue-800 text-white font-black py-5 rounded-[1.25rem] shadow-2xl shadow-blue-200 transition-all flex items-center justify-center gap-3 active:scale-[0.98] text-sm uppercase tracking-widest"
         name="login"
         type="submit">
         Sign In
-        <span class="material-symbols-outlined">login</span>
+        <span class="material-symbols-outlined text-lg">login</span>
       </button>
 
     </form>
+
+    <div class="mt-10 pt-10 border-t border-slate-100 text-center">
+        <p class="text-[11px] font-extrabold text-slate-300 uppercase tracking-[0.3em]">Northern Bukidnon State College</p>
+    </div>
 
   </div>
 </main>
